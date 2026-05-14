@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Entrar - Melvini</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="bg-light d-flex align-items-center justify-content-center" style="height: 100vh;">
+    <div class="card shadow p-4" style="width: 25rem;">
+        <h2 class="text-center mb-4">📚 Melvini</h2>
+        
+        <div th:if="${param.error}" class="alert alert-danger text-center">Usuário ou senha incorretos!</div>
+        <div th:if="${param.logout}" class="alert alert-success text-center">Deslogado com sucesso.</div>
+        <div th:if="${param.sucesso}" class="alert alert-success text-center">Conta criada! Faça login.</div>
+
+        <form th:action="@{/login}" method="post">
+            <div class="mb-3">
+                <label class="form-label">Usuário</label>
+                <input type="text" name="username" class="form-control" required autofocus>
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Senha</label>
+                <input type="password" name="password" class="form-control" required>
+            </div>
+            <button type="submit" class="btn btn-primary w-100">Entrar</button>
+        </form>
+        <div class="text-center mt-3">
+            <a th:href="@{/cadastro}">Não tem conta? Cadastre-se</a>
+        </div>
+    </div>
+</body>
+</html>

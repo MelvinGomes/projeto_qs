@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Minha Biblioteca - Melvini</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="bg-light">
+
+    <!-- Barra de Navegação Superior -->
+    <nav class="navbar navbar-dark bg-dark mb-4 shadow-sm">
+        <div class="container">
+            <a class="navbar-brand" href="#">📚 Melvini</a>
+            <div class="d-flex align-items-center text-white">
+                <span class="me-3">Salve, <strong th:text="${nomeUsuario}"></strong>!</span>
+                <!-- Botão de Sair (Logout padrão do Spring Security) -->
+                <form th:action="@{/logout}" method="post" class="m-0">
+                    <button type="submit" class="btn btn-outline-light btn-sm">Sair</button>
+                </form>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <h3 class="mb-4 text-secondary">Sua Coleção de Livros</h3>
+
+        <!-- Formulário de Cadastro com Validação -->
+        <div class="card mb-4 shadow-sm border-0">
+            <div class="card-body bg-white rounded">
+                <form th:action="@{/livros}" th:object="${novoLivro}" method="post" class="row g-3">
+                    <div class="col-md-4">
+                        <!-- Th:classappend coloca a borda vermelha se der erro -->
+                        <input type="text" th:field="*{titulo}" class="form-control" th:classappend="${#fields.hasErrors('titulo')} ? 'is-invalid' : ''" placeholder="Título do Livro">
+                        <div class="invalid-feedback" th:if="${#fields.hasErrors('titulo')}" th:errors="*{titulo}"></div>
+                    </div>
+                    <div class="col-md-4">
+                        <input type="text" th:field="*{autor}" class="form-control" th:classappend="${#fields.hasErrors('autor')} ? 'is-invalid' : ''" placeholder="Autor">
+                        <div class="invalid-feedback" th:if="${#fields.hasErrors('autor')}" th:errors="*{autor}"></div>
+                    </div>
+                    <div class="col-md-3">
+                        <select th:field="*{status}" class="form-select">
+                            <option value="QUERO LER">Quero Ler</option>
+                            <option value="LENDO">Lendo</option>
+                            <option value="LIDO">Lido</option>
+                        </select>
+                    </div>
+                    <div class="col-md-1">
+                        <button type="submit" class="btn btn-primary w-100 fw-bold">+</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Tabela / Lista de Livros -->
+        <div class="card shadow-sm border-0">
+            <table class="table table-hover mb-0">
+                <thead class="table-light">
+                    <tr>
+                        <th>Título</th>
+                        <th>Autor</th>
+                        <th>Status</th>
+                        <th class="text-center">Ações</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Se não tiver livro, mostra essa mensagem -->
+                    <tr th:if="${#lists.isEmpty(livros)}">
+                        <td colspan="4" class="text-center text-muted py-4">Nenhum livro na estante ainda. Bora ler, cria!</td>
+                    </tr>
+                    <!-- Loop de repetição para mostrar os livros -->
+                    <tr th:each="livro : ${livros}">
+                        <td class="align-middle fw-semibold" th:text="${livro.titulo}"></td>
+                        <td class="align-middle text-secondary" th:text="${livro.autor}"></td>
+                        <td class="align-middle">
+                            <span class="badge bg-secondary" th:text="${livro.status}"></span>
+                        </td>
+                        <td class="text-center">
+                            <a th:href="@{/livros/deletar/{id}(id=${livro.id})}" class="btn btn-outline-danger btn-sm">Excluir</a>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+</body>
+</html>
