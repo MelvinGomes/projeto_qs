@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Editar Livro - Melvini</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="bg-light">
+
+<nav class="navbar navbar-dark bg-dark mb-4 shadow-sm">
+    <div class="container">
+        <span class="navbar-brand mb-0 h1">📚 Edição Restrita</span>
+    </div>
+</nav>
+
+<div class="container d-flex justify-content-center mt-5">
+    <div class="card shadow border-0" style="width: 30rem;">
+        <div class="card-body">
+            <h4 class="mb-4 text-center">Modificar Atributos</h4>
+            <!-- Th Action mirando no link editar dinâmico  -->
+            <form th:action="@{/livros/editar/{id}(id=${livro.id})}" th:object="${livro}" method="post">
+                <div class="mb-3">
+                    <label class="form-label text-muted fw-bold">Novo Título:</label>
+                    <input type="text" th:field="*{titulo}" class="form-control" th:classappend="${#fields.hasErrors('titulo')} ? 'is-invalid' : ''">
+                    <div class="invalid-feedback" th:if="${#fields.hasErrors('titulo')}" th:errors="*{titulo}"></div>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label text-muted fw-bold">Novo Autor:</label>
+                    <input type="text" th:field="*{autor}" class="form-control" th:classappend="${#fields.hasErrors('autor')} ? 'is-invalid' : ''">
+                    <div class="invalid-feedback" th:if="${#fields.hasErrors('autor')}" th:errors="*{autor}"></div>
+                </div>
+
+                <div class="mb-4">
+                    <label class="form-label text-muted fw-bold">Como está o Andamento?</label>
+                    <select th:field="*{status}" class="form-select">
+                        <option value="QUERO LER">Quero Ler</option>
+                        <option value="LENDO">Lendo</option>
+                        <option value="LIDO">Lido</option>
+                    </select>
+                </div>
+
+                <div class="d-flex justify-content-between">
+                    <a th:href="@{/livros}" class="btn btn-secondary">Voltar sem Salvar</a>
+                    <button type="submit" class="btn btn-success">✅ Salvar Edições</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

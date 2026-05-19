@@ -65,6 +65,43 @@ public class LivroController {
         return "redirect:/livros";
     }
 
+    // Rota pra CARREGAR a telinha com as info originais do livro antes de editar
+    @GetMapping("/editar/{id}")
+    public String carregarTelaEdicao(@PathVariable String id, Principal principal, Model model) {
+        Usuario usuario = getUsuarioLogado(principal);
+        Livro livro = livroRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Erro. Livro fantasma?"));
+
+        // Regra de segurança: Tá tentando editar o livro de outra pessoa? Bloqueia o mano!
+        if (!livro.getUsuarioId().equals(usuario.getId())) {
+            return "redirect:/livros?error=acesso-negado";
+        }
+
+        model.addAttribute("livro", livro);
+        return "editar-livro";
+    }
+
+    // Rota que RECEBE o livro arrumadinho do form e SALVA em cima do antigo
+    @PostMapping("/editar/{id}")
+    public String atualizarLivro(@PathVariable String id, @Valid @ModelAttribute("livro") Livro livroModificado, BindingResult result, Principal principal) {
+        Usuario usuario = getUsuarioLogado(principal);
+
+        // Retorna a tela com a caixa vermelha de erro se tentou bolar titulo vazio de sacanagem:
+        if (result.hasErrors()) {
+            return "editar-livro";
+        }
+
+        Livro livroAntigo = livroRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Erro"));
+
+        if (livroAntigo.getUsuarioId().equals(usuario.getId())) {
+            livroAntigo.setTitulo(livroModificado.getTitulo());
+            livroAntigo.setAutor(livroModificado.getAutor());
+            livroAntigo.setStatus(livroModificado.getStatus());
+            livroRepository.save(livroAntigo);
+        }
+
+        return "redirect:/livros";
+    }
+
     // Deleta o livro
     @GetMapping("/deletar/{id}")
     public String deletarLivro(@PathVariable String id) {

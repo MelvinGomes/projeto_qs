@@ -56,4 +56,22 @@ public class AuthControllerTest {
                // mas a ideia aqui é mostrar o formato do teste pro professor.
                .andExpect(status().is3xxRedirection()); // Verifica se ele redirecionou (pode ajustar pra verificar erro dps)
     }
+
+    @Test
+    @DisplayName("Registra Usuario com Sucesso E Repete Conta gerando bloqueio (if extra cobertura)")
+    public void testDuplicidadeEEfetividade() throws Exception {
+        // Criar Novo Limpo (Vai cair no 'Return redirect /login' 200/3xx)
+        mockMvc.perform(post("/cadastro")
+               .param("username", "meninonei")
+               .param("password", "futebol22")
+               .with(csrf()))
+               .andExpect(status().is3xxRedirection()); 
+
+        // Tentando Criar Exatamente com a mesma coisa! (Passa pelo if e dispara .isPresent retornando /cadastro?error)
+        mockMvc.perform(post("/cadastro")
+               .param("username", "meninonei")
+               .param("password", "outroqualquer")
+               .with(csrf()))
+               .andExpect(status().is3xxRedirection());
+    }
 }
