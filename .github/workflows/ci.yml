@@ -1,0 +1,31 @@
+name: Validar Trabalho e Subir CVR 19_Nao_e_20
+
+on:
+  push:
+    branches: [ "main" ]
+
+jobs:
+  qualidade:
+    name: 'Build + Validação 80%'
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: '1. Buscando meu Código ZIKAAAAAAAAA no Repo'
+        uses: actions/checkout@v4
+        
+      - name: '2. Coloca o Java 21 pro Chefe Ver e Executar Testcontainers!'
+        uses: actions/setup-java@v4
+        with:
+          java-version: '21'
+          distribution: 'temurin'
+          cache: maven
+          
+      - name: '3. A BRUTALIDADE Roda Certo - Batendo mvn e jacoco e o CrLho!'
+        run: mvn clean test
+
+      - name: '4. Salvando e Zipando Resultados Coverage + Jars !! '
+        if: success()
+        uses: actions/upload-artifact@v4
+        with:
+          name: meu-jacocotamoh
+          path: target/site/jacoco
