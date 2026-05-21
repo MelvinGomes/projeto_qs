@@ -74,7 +74,8 @@
                             <span class="badge bg-secondary" th:text="${livro.status}"></span>
                         </td>
                         <td class="text-center">
-                            <a th:href="@{/livros/deletar/{id}(id=${livro.id})}" class="btn btn-outline-danger btn-sm">Excluir</a>
+                            <a th:href="@{/livros/editar/{id}(id=${livro.id})}" class="btn btn-outline-primary btn-sm me-1">✏️ Editar</a>
+                            <a th:href="@{/livros/deletar/{id}(id=${livro.id})}" class="btn btn-outline-danger btn-sm">🗑️ Excluir</a>
                         </td>
                     </tr>
                 </tbody>

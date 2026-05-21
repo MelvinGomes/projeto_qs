@@ -18,6 +18,7 @@
 	
 	<properties>
 		<java.version>21</java.version>
+		<testcontainers.version>1.21.4</testcontainers.version> 
 	</properties>
 	
 	<dependencies>
@@ -100,6 +101,12 @@
 				<groupId>org.jacoco</groupId>
 				<artifactId>jacoco-maven-plugin</artifactId>
 				<version>0.8.12</version> <!-- Atualizado pro Java 21 -->
+				<configuration>
+                	<excludes>
+                    <!-- Bloqueamos JaCoCo para essa Base Inocente-->
+                    <exclude>trabalho_qs/melvini/MelviniApplication.class</exclude>
+                	</excludes>
+            	</configuration>
 				<executions>
 					<execution>
 						<goals>
